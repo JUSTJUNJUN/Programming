@@ -8,7 +8,6 @@
  * q:exit
  * h:help info
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -94,3 +93,4 @@ int see_more(FILE *cmd)
 
     return 0;
 }
+
