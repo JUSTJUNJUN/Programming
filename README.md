@@ -21,3 +21,6 @@ Linux 5.4.0-110-generic #124~18.04.1-Ubuntu SMP x86_64 GNU/Linux
 - 资源的管理及分配
 - 网络访问
 - 面向用户
+
+## Tips
+- 使用Linux系统中自带的manual手册查询shell命令与系统调用的具体信息与用法，使用man命令查询。
