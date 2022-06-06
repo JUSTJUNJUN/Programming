@@ -1,6 +1,16 @@
 /**
- * use utmp cache
+ * Description:
+ *  Show who is logged on.
+ * 
+ * Function Process:
+ *  1.  Open /var/run/utmp;
+ *  2.  Read records to utmp buf(usr/include/utmp.h);
+ *  3.  Use buffer method to decrease consuming.
+ *  4.  Show the record;
+ *  5.  Close /var/run/utmp;
+ * 
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <utmp.h>
@@ -25,6 +35,7 @@ int utmp_open(char *filename);
 struct utmp *utmp_next(int utfd);
 int utmp_reload(int fd);
 void utmp_close(int fd);
+int user_logout(char line_buf[], int line_size);
 
 int main(void)
 {
@@ -121,3 +132,43 @@ void utmp_close(int fd)
 
     return;
 }
+
+int user_logout(char line_buf[], int line_size)
+{
+    int fd = 0;
+    char record_buf[UTSIZE] = {0};
+    struct utmp *tmp = NULL;
+    int retval = -1;
+
+    fd = open(UTMP_FILE_POS, O_RDWR);
+    if (fd == -1) {
+        printf("Open utmp file failed, exit\n");
+        return -1;
+    }
+
+    while (read(fd, record_buf, UTSIZE) == UTSIZE) {
+        tmp = (struct utmp *)record_buf;
+        if (strncmp(tmp->ut_line, line_buf, line_size) == 0) {
+            printf("Modify the record to logout\n");
+            tmp->ut_type = DEAD_PROCESS;
+            if (time(&(tmp->ut_tv)) != -1) {
+
+
+                if (lseek(fd, -UTSIZE, SEEK_CUR) != -1) {
+                    if (write(fd, tmp, UTSIZE) != -1) {
+                        retval = 0;
+                    }
+                }
+            }
+            break;
+        }
+    }
+    
+    if (close(fd) == -1) {
+        retval = -1;
+    }
+
+    return retval;
+}
+
+
