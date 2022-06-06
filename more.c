@@ -1,27 +1,36 @@
 /**
- * Function description:
- * Show 24 lines from input;
- * Print [more ?] message;
- * Input control key;
- * Enter:advance one line
- * Space:advance one screen
- * q:exit
- * h:help info
+ * Description:
+ *  View data source content.
+ * 
+ * Function Process:
+ *  1.  Decide data source(stdin or files);
+ *  2.  Show 24 lines from data source;
+ *  3.  Print [more ?] message;
+ *  4.  Wait command(Enter, SPACE, q and h);
+ *          Enter:advance one line;
+ *          Space:advance one screen;
+ *          q:exit;
+ *          h:function usage;
+ * 
+ * ToDo:
+ *  When input command, no need to input "\n".
+ * 
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #define PAGELEN 24
 #define LINELEN 512
 
-void do_more(FILE *);/* show */
-int see_more(FILE *);/* deal next ctrl action */
+void do_more(FILE *);/* show data source content */
+int see_more(FILE *);/* handle each command */
 
 int main (int argc, char **argv)
 {
     FILE *fp = NULL;
 
-    if (argc == 1) {/* No other inargs, read from stdin */
+    if (argc == 1) {/* No inargs, default from stdin */
         do_more(stdin);
     } else {
         while (--argc) {
