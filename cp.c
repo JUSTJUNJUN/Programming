@@ -1,5 +1,14 @@
 /**
- * sehll command: cp srcfile dstfile
+ * Description:
+ *  Copy files and directories.
+ * 
+ * Function Process:
+ *  1.  Open sourcefile for reading;
+ *  2.  Open copyfile for writing;
+ *  3.  Read from sourcefile to buffer;
+ *  4.  Write buffer to copyfile;
+ *  5.  Close sourcefile & copyfile.
+ * 
  */
 #include <stdio.h>
 #include <unistd.h>
