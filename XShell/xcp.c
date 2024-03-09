@@ -11,6 +11,7 @@
  * 
  */
 #include <stdio.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -22,17 +23,23 @@ int main(int argc, char **argv)
     int src_fd, dst_fd;
     int num_of_read = 0;
     char buf[BUFSIZ];
+    int openflag;
+    mode_t fmode;
 
     if (argc != 3) {
         fprintf(stderr, "usage: argument lack\n");
         exit(1);
     }
 
-    if ((src_fd = open(argv[1], O_RDONLY)) == -1) {
+    src_fd = open(argv[1], O_RDONLY);
+    if (src_fd == -1) {
         file_err_deal("Cannot open src file", argv[1]);
     }
 
-    if ((dst_fd = creat(argv[2], 0644)) == -1) {
+    openflag = O_CREAT | O_WRONLY | O_TRUNC;
+    fmode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
+    dst_fd = open(argv[2], openflag, fmode);
+    if (dst_fd == -1) {
         file_err_deal("Cannot open dst file", argv[2]);
     }
 
